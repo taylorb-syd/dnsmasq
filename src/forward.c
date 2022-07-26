@@ -1624,6 +1624,8 @@ void receive_query(struct listener *listen, time_t now)
 	udp_size = daemon->edns_pktsz;
       else if (udp_size < PACKETSZ)
 	udp_size = PACKETSZ; /* Sanity check - can't reduce below default. RFC 6891 6.2.3 */
+      pheader -= 6; /* ext_class */
+      PUTSHORT(udp_size, pheader) /* Bounding forwarded queries to maximum configured */
     }
 
 #ifdef HAVE_CONNTRACK
